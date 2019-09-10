@@ -1,0 +1,26 @@
+.user-search-control {
+  &.with-groups {
+    .group-listing {
+      float: left;
+      width: 48%;
+    }
+
+    .user-listing {
+      float: right;
+      width: 48%;
+    }
+  }
+
+  .user-listing {
+    position: relative;
+
+    .spinner {
+      position: absolute;
+      top: 50%;
+      margin-top: -8px;
+      right: 3px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
