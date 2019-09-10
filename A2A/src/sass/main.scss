@@ -1,6 +1,7 @@
 $footer-height: 30px;
 
-html, body {
+html,
+body {
   min-height: 100%;
 }
 
@@ -16,8 +17,6 @@ body {
 @import "screens/all";
 
 @import "components/all";
-
-@import "dialogs/all";
 
 #content-container {
   margin-bottom: 10px;
@@ -80,8 +79,9 @@ button {
 /* Remove spinner styling from number inputs in supported browsers */
 /* For Firefox */
 input[type='number'] {
-  -moz-appearance:textfield;
+  -moz-appearance: textfield;
 }
+
 /* Webkit browsers like Safari and Chrome */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -89,12 +89,16 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type="radio"],
+input[type="checkbox"] {
   @extend %fixBootstrapCheckboxsAndRadios;
 }
 
-.radio, .checkbox {
-  input[type="radio"], input[type="checkbox"] {
+.radio,
+.checkbox {
+
+  input[type="radio"],
+  input[type="checkbox"] {
     @extend %fixBootstrapCheckboxsAndRadios;
   }
 
@@ -145,7 +149,7 @@ input[type="radio"], input[type="checkbox"] {
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255, 255, 255, 0.5);
 
   #loading-curtain-box {
     text-align: center;
@@ -175,8 +179,15 @@ footer {
 }
 
 @keyframes rotate {
-  0%    { transform: rotate(0deg); }
-  100%  { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.sealhighlight { color: red; }
+.sealhighlight {
+  color: red;
+}

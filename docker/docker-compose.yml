@@ -1,0 +1,14 @@
+version: "3"
+services:
+  a2a:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - 3001:3000
+    volumes:
+      - ../a2a:/app
+      - /app/node_modules
