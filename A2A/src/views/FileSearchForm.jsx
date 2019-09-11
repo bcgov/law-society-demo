@@ -1,26 +1,24 @@
-import $ from 'jquery';
+import createReactClass from 'create-react-class';
 import _ from 'lodash';
+import Moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {
   Button,
   ButtonGroup,
+  Card,
   Col,
-  ControlLabel,
+  Dropdown,
   Form,
+  FormCheck,
   FormControl,
   FormGroup,
-  Glyphicon,
-  Radio,
+  FormLabel,
   Row,
-  Well,
 } from 'react-bootstrap';
-import DateTimePicker from 'react-bootstrap-datetimepicker';
-import Moment from 'react-moment';
+import DatePicker from 'react-date-picker';
 
-import LocationsDropdown from '../components/LocationsDropdown.jsx';
 import Spinner from '../components/Spinner.jsx';
-import CaseSearchResponse from '../models/CaseSearchResponse';
 
 /* Views and Components*/
 /* Utilities */
@@ -74,7 +72,7 @@ export const OTHER_MODE_PARAMS = [
   }
 ];
 
-var FileSearchForm = React.createClass({
+var FileSearchForm = createReactClass({
   propTypes: {
     formState: PropTypes.object,
     onSearch: PropTypes.func,
@@ -84,11 +82,11 @@ var FileSearchForm = React.createClass({
   },
 
   getInitialState() {
-    if (!_.contains(["criminal", "civil", "other"], this.props.formState.fileDivisionCd)) {
-      throw "fileDivisionCdError";
-    }
+    // if (!_.contains(["criminal", "civil", "other"], this.props.formState.fileDivisionCd)) {
+    //   throw "fileDivisionCdError";
+    // }
 
-    var searchMode = _.findWhere(SEARCH_MODE_PARAMS, { mode: "FILENO" });
+    var searchMode = _.find(SEARCH_MODE_PARAMS, { mode: "FILENO" });
 
     return _.defaults(
       {
@@ -135,12 +133,12 @@ var FileSearchForm = React.createClass({
   },
 
   handleSearchModeChange(param /*, event*/) {
-    var selectedModeParam = $.extend({}, param);
+    var selectedModeParam = _.extend({}, param);
     this.setState({ selectedSearchMode: selectedModeParam });
   },
 
   handleSearchModeParamValueChange(event) {
-    this.setState({ selectedSearchMode: $.extend({}, this.state.selectedSearchMode, { value: event.target.value }) });
+    this.setState({ selectedSearchMode: _.extend({}, this.state.selectedSearchMode, { value: event.target.value }) });
   },
 
   filePrefixChange(e) {
@@ -257,11 +255,7 @@ var FileSearchForm = React.createClass({
       this.setState({ searching: false });
       this.props.onEnterDetails(queryParams);
     } else {
-      var searchPromise = new CaseSearchResponse({}, { isCriminal: this.getDivisionFlag("criminal") })
-        .fetch({ data: queryParams })
-        .finally(() => {
-          this.setState({ searching: false });
-        });
+      var searchPromise = Promise.resolve(new Array());
 
       this.props.onSearch(searchPromise, queryParams, _.clone(this.state));
     }
@@ -298,15 +292,9 @@ var FileSearchForm = React.createClass({
   renderDateTimePickers() {
     return this.state.dates.map((date, i) => (
       <div key={i} className="dynamic-date">
-        <DateTimePicker
-          inputFormat="DD-MMM-YYYY"
-          mode="date"
-          dateTime={Moment(date) + ""}
-          inputProps={{ placeholder: "DD-MMM-YYYY" }}
-          onChange={this.dateChange.bind(this, i)}
-        />
+        <DatePicker format="DD-MMM-YYYY" value="" onChange={this.handleStartDateChange} />
         <Button className="remove-button" onClick={this.removeDateTimePicker.bind(this, i)}>
-          <Glyphicon glyph="remove-circle" />
+          {/* <Glyphicon glyph="remove-circle" /> */}
         </Button>
       </div>
     ));
@@ -387,13 +375,14 @@ var FileSearchForm = React.createClass({
                   } ${this.state.errors[param.paramName] ? "error" : ""}`}
                 >
                   <div className="pull-left">
-                    <Radio
+                    <FormCheck
+                      type="radio"
                       name="searchModeParam"
                       onChange={this.handleSearchModeChange.bind(this, param)}
                       checked={this.state.selectedSearchMode.paramName === param.paramName}
                     >
                       {param.label}
-                    </Radio>
+                    </FormCheck>
                     <FormControl
                       maxLength={255}
                       className={`search-input mode-${param.paramName}`}
@@ -415,10 +404,10 @@ var FileSearchForm = React.createClass({
                     if (param.id === "file-number" && isCriminal) {
                       // include UI for criminal file number modifiers
                       return (
-                        <Well bsStyle="sm" className="optional-file-fields optional-fields">
+                        <Card bsStyle="sm" className="optional-file-fields optional-fields">
                           <h5>Optional...</h5>
                           <FormGroup controlId="file-number-prefix">
-                            <ControlLabel>Prefix</ControlLabel>
+                            <FormLabel>Prefix</FormLabel>
                             <FormControl
                               placeholder="AH"
                               defaultValue={this.state.filePrefix || ""}
@@ -426,7 +415,7 @@ var FileSearchForm = React.createClass({
                             />
                           </FormGroup>
                           <FormGroup controlId="file-number-seq">
-                            <ControlLabel>Seq Number</ControlLabel>
+                            <FormLabel>Seq Number</FormLabel>
                             <FormControl
                               placeholder="1"
                               defaultValue={this.state.fileSequence || ""}
@@ -434,14 +423,14 @@ var FileSearchForm = React.createClass({
                             />
                           </FormGroup>
                           <FormGroup controlId="file-number-ref">
-                            <ControlLabel>Type Ref</ControlLabel>
+                            <FormLabel>Type Ref</FormLabel>
                             <FormControl
                               placeholder="B"
                               defaultValue={this.state.fileTypeRef || ""}
                               onChange={this.fileTypeRefChange}
                             />
                           </FormGroup>
-                        </Well>
+                        </Card>
                       );
                     } else if (param.id === "name") {
                       return (
@@ -469,7 +458,7 @@ var FileSearchForm = React.createClass({
                     <FormGroup validationState={this.state.errors.ceremonyOfChange ? "error" : null}>
                       <Row className="field-row">
                         <Col md={4}>
-                          <ControlLabel>Ceremony of:</ControlLabel>
+                          <FormLabel>Ceremony of:</FormLabel>
                         </Col>
                         <Col md={6}>
                           <FormControl
@@ -486,7 +475,7 @@ var FileSearchForm = React.createClass({
                       <FormGroup validationState={this.state.errors.styleOfCause ? "error" : null}>
                         <Row className="field-row">
                           <Col md={4}>
-                            <ControlLabel>Style of Cause:</ControlLabel>
+                            <FormLabel>Style of Cause:</FormLabel>
                           </Col>
                           <Col md={6}>
                             <FormControl
@@ -500,7 +489,7 @@ var FileSearchForm = React.createClass({
                       <FormGroup validationState={this.state.errors.judge ? "error" : null}>
                         <Row className="field-row">
                           <Col md={4}>
-                            <ControlLabel>Judge:</ControlLabel>
+                            <FormLabel>Judge:</FormLabel>
                           </Col>
                           <Col md={6}>
                             <FormControl placeholder="eg. Justice Smith" onChange={this.judgeChange}></FormControl>
@@ -513,7 +502,7 @@ var FileSearchForm = React.createClass({
                 <FormGroup validationState={this.state.errors.room ? "error" : null}>
                   <Row className="field-row">
                     <Col md={4}>
-                      <ControlLabel>Room:</ControlLabel>
+                      <FormLabel>Room:</FormLabel>
                     </Col>
                     <Col md={6}>
                       <FormControl maxLength={20} placeholder="eg. 406" onChange={this.roomChange}></FormControl>
@@ -523,7 +512,7 @@ var FileSearchForm = React.createClass({
                 <FormGroup validationState={this.state.errors.dates ? "error" : null}>
                   <Row style={{ width: 750 }}>
                     <Col md={4}>
-                      <ControlLabel>Date of Proceeding:</ControlLabel>
+                      <FormLabel>Date of Proceeding:</FormLabel>
                     </Col>
                     <Col md={6}>
                       {this.renderDateTimePickers()}
@@ -536,7 +525,7 @@ var FileSearchForm = React.createClass({
               </FormGroup>
             ) : (
               <FormGroup controlId="search-mode-class">
-                <ControlLabel>Class:</ControlLabel>
+                <FormLabel>Class:</FormLabel>
                 <FormControl
                   componentClass="select"
                   placeholder=""
@@ -554,11 +543,17 @@ var FileSearchForm = React.createClass({
         </div>
 
         <div className="locations field-row">
-          <LocationsDropdown
-            label="Initiating Registry:"
-            defaultValue={this.state.fileAgencyId}
-            onChange={this.locationChanged}
-          />
+          <Dropdown>
+            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+              Locations
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item>Victoria</Dropdown.Item>
+              <Dropdown.Item>Vancouver</Dropdown.Item>
+              <Dropdown.Item>Kelowna</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
         <div className="form-group" style={{ paddingLeft: 215 }}>
           <Button bsStyle="primary" type="submit">

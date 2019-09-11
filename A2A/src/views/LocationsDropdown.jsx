@@ -1,3 +1,4 @@
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { ControlLabel, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
@@ -6,7 +7,7 @@ import currentUser from '../user';
 import CodeLookups from '../utils/CodeLookups';
 
 /* Utilities */
-var LocationsDropdown = React.createClass({
+var LocationsDropdown = createReactClass({
   getDefaultProps() {
     return {
       onClick: function() {}

@@ -1,12 +1,16 @@
+import createReactClass from 'create-react-class';
 import _ from 'lodash';
+import Moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Alert, Button, Col, Jumbotron, Row, Tab, Table } from 'react-bootstrap';
+import { Alert, Button, Col, Jumbotron, Row, Tab, Table, Tabs } from 'react-bootstrap';
 import DatePicker from 'react-date-picker';
-import Moment from 'react-moment';
+import Spinner from '../components/Spinner';
+import CaseSearchProgress from './CaseSearchProgress';
+import FileSearchForm from './FileSearchForm';
 
-import Spinner from '../components/Spinner.jsx';
 
+// import React from 'react';
 var currentUser = {
   justinAgencyId: "justinAgencyId",
   isMinistryUser: true
@@ -14,7 +18,7 @@ var currentUser = {
 
 /* Utilities */
 /* Models and Collections */
-var CaseSearch = React.createClass({
+var CaseSearch = createReactClass({
   propTypes: {
     location: PropTypes.object.isRequired
   },
@@ -24,18 +28,21 @@ var CaseSearch = React.createClass({
   },
 
   getInitialState() {
-    var query = this.props.location.query;
-    var searchMode = _.findWhere("", { mode: query.searchMode || "FILENO" });
+    // var query = this.props.location.query;
+    var query = {};
+    // var searchMode = _.findWhere("", { mode: query.searchMode || "FILENO" });
+    var searchMode = _.find("", { mode: "FILENO" });
 
     // the file division code must be set to either 'criminal' or 'civil', otherwise we won't be able to call the correct files API
-    var fileDivisionCd = query.fileDivisionCd || "criminal";
-    if (!_.contains(["criminal", "civil", "other"], fileDivisionCd)) {
+    // var fileDivisionCd = query.fileDivisionCd || "criminal";
+    var fileDivisionCd = "criminal";
+    if (!_.includes(["criminal", "civil", "other"], fileDivisionCd)) {
       throw "fileDivisionCdError";
     }
 
     // Set caseFiles to a collection of zero or more CaseDetail type 1 which represent the (possibly empty) set of cases found by a search.
     //
-    var locState = this.props.location.state;
+    var locState = {};
     var existingSearchResults = (locState || {}).searchResults;
     var caseFiles;
     if (existingSearchResults === undefined) {
@@ -55,7 +62,7 @@ var CaseSearch = React.createClass({
     }
 
     var queryState = {
-      selectedSearchMode: _.extend({}, searchMode, { value: query[searchMode.paramName] }),
+      selectedSearchMode: _.extend({}, searchMode, { value: "" }),
       fileAgencyId: query.fileHomeAgencyId,
       fileDivisionCd: fileDivisionCd,
       courtClassCd: query.courtClassCd,
@@ -70,18 +77,19 @@ var CaseSearch = React.createClass({
         searching: false
       },
       {
-        pageHeader: currentUser.get("isMinistryUser") ? "New Transcript Order" : "New Transcript Order",
+        pageHeader: "New Transcript Order",
         formState: _.defaults(
           {},
-          this.props.location.state ? this.props.location.state.formState : null, // override with whatever is in the location.state (back button)
+          null,
+          // this.props.location.state ? this.props.location.state.formState : null, // override with whatever is in the location.state (back button)
           queryState, // override again with whatever is in the querystring
           {
             // default to user's home location if not set
-            fileAgencyId: currentUser.get("justinAgencyId")
+            fileAgencyId: currentUser.justinAgencyId
           }
         )
       },
-      _.pick(this.props.location.state, "resultCount", "showSearchResults", "responseMessageTxt"),
+      _.pick(null, "resultCount", "showSearchResults", "responseMessageTxt"),
       {
         resultCount: 0,
         showSearchResults: false,
@@ -270,16 +278,18 @@ var CaseSearch = React.createClass({
     return (
       <div id="case-search">
         <Jumbotron>{this.state.pageHeader}</Jumbotron>
-        {/* <CaseSearchProgress searchProgress={this.state.searchProgress} searchParams={this.state.searchParams} /> */}
-        <Tab header="Search Criteria">
-          {/* <FileSearchForm
-            formState={this.state.formState}
-            onSearch={this.onSearch}
-            onChangeCaseSearchProgress={this.onChangeCaseSearchProgress}
-            onEnterDetails={this.onEnterDetails}
-            fileDivisionLocked={false}
-          /> */}
-        </Tab>
+        <CaseSearchProgress searchProgress={this.state.searchProgress} searchParams={this.state.searchParams} />
+        <Tabs>
+          <Tab header="Search Criteria">
+            <FileSearchForm
+              formState={this.state.formState}
+              onSearch={this.onSearch}
+              onChangeCaseSearchProgress={this.onChangeCaseSearchProgress}
+              onEnterDetails={this.onEnterDetails}
+              fileDivisionLocked={false}
+            />
+          </Tab>
+        </Tabs>
         {this.state.searching && !this.state.showSearchResults ? <Spinner centre /> : null}
         {(() => {
           if (this.state.duplicateFileNumber || this.state.oldOrders) {
@@ -386,7 +396,7 @@ var CaseSearch = React.createClass({
   }
 });
 
-var CaseSearchResultList = React.createBackboneClass({
+var CaseSearchResultList = createReactClass({
   changeOptions: "change",
 
   propTypes: {
@@ -453,76 +463,78 @@ var CaseSearchResultList = React.createBackboneClass({
     var isCriminal = this.getCriminalFlag();
     return (
       <div id="search-results">
-        <Tab bsStyle="primary">
-          <div id="search-dates" className="clearfix pull-right">
-            <small id="search-dates-label">Date</small>
+        <Tabs>
+          <Tab bsStyle="primary">
+            <div id="search-dates" className="clearfix pull-right">
+              <small id="search-dates-label">Date</small>
 
-            <div id="search-start-date" className="search-date">
-              <label>Start Date</label>
-              <DatePicker
-                format="DD-MMM-YYYY"
-                value={
-                  this.props.searchParams.appearanceDateFilterStart
-                    ? Moment(this.state.startDate).format("DD-MMM-YYYY")
-                    : ""
-                }
-                onChange={this.handleStartDateChange}
-              />
+              <div id="search-start-date" className="search-date">
+                <label>Start Date</label>
+                <DatePicker
+                  format="DD-MMM-YYYY"
+                  value={
+                    this.props.searchParams.appearanceDateFilterStart
+                      ? Moment(this.state.startDate).format("DD-MMM-YYYY")
+                      : ""
+                  }
+                  onChange={this.handleStartDateChange}
+                />
+              </div>
+              <div id="search-end-date" className="search-date">
+                <label>End Date</label>
+                <DatePicker
+                  inputFormat="DD-MMM-YYYY"
+                  value={
+                    this.props.searchParams.appearanceDateFilterStart
+                      ? Moment(this.state.startDate).format("DD-MMM-YYYY")
+                      : ""
+                  }
+                  onChange={this.handleEndDateChange}
+                />
+              </div>
+              <Button bsStyle="primary" disabled={this.props.searching} onClick={this.handleSearch}>
+                Search
+                <Spinner show={this.props.searching} />
+              </Button>
             </div>
-            <div id="search-end-date" className="search-date">
-              <label>End Date</label>
-              <DatePicker
-                inputFormat="DD-MMM-YYYY"
-                value={
-                  this.props.searchParams.appearanceDateFilterStart
-                    ? Moment(this.state.startDate).format("DD-MMM-YYYY")
-                    : ""
-                }
-                onChange={this.handleEndDateChange}
-              />
-            </div>
-            <Button bsStyle="primary" disabled={this.props.searching} onClick={this.handleSearch}>
-              Search
-              <Spinner show={this.props.searching} />
-            </Button>
-          </div>
 
-          <h3>
-            Found <strong>{this.props.resultCount}</strong> Similar Cases
-          </h3>
-          <br />
-          <small>Choose below or refine your search</small>
-          <Table striped>
-            <thead>
-              <tr>
-                <th>File Number</th>
-                <th>{isCriminal ? <span>Accused</span> : <span>Party</span>}</th>
-                <th>Location</th>
-                <th>Level</th>
-                <th>Classification</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.searchResults.map(caseDetail => {
-                // model object CaseDetail type 1
-                return (
-                  <CaseSearchResultList.CaseListInformation
-                    key={caseDetail.getCaseId()}
-                    caseInfo={caseDetail}
-                    {...this.props}
-                  />
-                );
-              })}
-            </tbody>
-          </Table>
-        </Tab>
+            <h3>
+              Found <strong>{this.props.resultCount}</strong> Similar Cases
+            </h3>
+            <br />
+            <small>Choose below or refine your search</small>
+            <Table striped>
+              <thead>
+                <tr>
+                  <th>File Number</th>
+                  <th>{isCriminal ? <span>Accused</span> : <span>Party</span>}</th>
+                  <th>Location</th>
+                  <th>Level</th>
+                  <th>Classification</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.props.searchResults.map(caseDetail => {
+                  // model object CaseDetail type 1
+                  return (
+                    <CaseSearchResultList.CaseListInformation
+                      key={caseDetail.getCaseId()}
+                      caseInfo={caseDetail}
+                      {...this.props}
+                    />
+                  );
+                })}
+              </tbody>
+            </Table>
+          </Tab>
+        </Tabs>
       </div>
     );
   }
 });
 
-CaseSearchResultList.CaseListInformation = React.createClass({
+CaseSearchResultList.CaseListInformation = createReactClass({
   propTypes: {
     caseInfo: PropTypes.object,
     searchParams: PropTypes.object

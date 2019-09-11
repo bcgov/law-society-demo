@@ -1,10 +1,10 @@
-import $ from 'jquery';
+import createReactClass from 'create-react-class';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
-var CaseSearchProgress = React.createClass({
+var CaseSearchProgress = createReactClass({
   propTypes: {
     searchParams: PropTypes.object,
     searchProgress: PropTypes.string,
@@ -13,12 +13,12 @@ var CaseSearchProgress = React.createClass({
 
   render: function() {
     var qs = "";
-    if (this.props.searchParams) {
-      qs = $.param(this.props.searchParams || {});
-      if (qs) {
-        qs = "?" + qs;
-      }
-    }
+    // if (this.props.searchParams) {
+    //   qs = $.param(this.props.searchParams || {});
+    //   if (qs) {
+    //     qs = "?" + qs;
+    //   }
+    // }
 
     var props = _.omit(_.clone(this.props), "searchProgress", "caseId", "searchParams");
     return (
