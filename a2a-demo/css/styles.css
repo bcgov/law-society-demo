@@ -15,10 +15,13 @@ body {
 }
 
 .logout {
-  float: right;
   cursor: pointer;
   margin-top: -37px;
   margin-right: 5px;
+  position: absolute;
+  right: 0;
+  padding-right: 10px;
+  display: block;
 }
 
 .header {
@@ -44,4 +47,5 @@ body {
 .header-info {
   float: right;
   margin-top: -37px;
+  display: block;
 }
