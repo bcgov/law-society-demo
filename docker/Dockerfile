@@ -1,17 +1,4 @@
-# base image
-FROM node:alpine
+FROM abiosoft/caddy:1.0.0
 
-# set working directory
-WORKDIR /app
-
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
-
-# install and cache app dependencies
-COPY a2a/package.json /app/package.json
-RUN npm install
-RUN npm install react-scripts -g
-ADD a2a/src /app/src
-
-# start app
-CMD ["npm", "start"]
+COPY caddy/Caddyfile /etc/Caddyfile
+COPY /a2a-demo /srv
