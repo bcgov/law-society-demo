@@ -1,6 +1,6 @@
 var keycloak = Keycloak({
-  url: "https://sso-dev.pathfinder.gov.bc.ca/auth",
-  realm: "vlv1c2en",
+  url: "https://secure-keycloak-devex-bcgov-dap-tools.pathfinder.gov.bc.ca/auth",
+  realm: "vc-auth",
   clientId: "law-society-demo"
 });
 keycloak
