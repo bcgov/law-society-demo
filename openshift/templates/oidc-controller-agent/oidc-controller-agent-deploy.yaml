@@ -104,6 +104,7 @@ objects:
                   --inbound-transport http '0.0.0.0' ${HTTP_INTERFACE_PORT}
                   --endpoint ${AGENT_ENDPOINT}
                   --outbound-transport http
+                  --genesis-url "${GENESIS_URL}"
                   --wallet-type 'indy'
                   --wallet-name "$(echo ${AGENT_WALLET_NAME} | tr '[:upper:]' '[:lower:]' | sed "s~-~_~g")"
                   --wallet-key "${WALLET_ENCRYPTION_KEY}"
@@ -116,6 +117,8 @@ objects:
                   --label "${AGENT_NAME}"
                   --log-level ${AGENT_LOG_LEVEL});
               env:
+                - name: GENESIS_URL
+                  value: ${GENESIS_FILE_URL}
                 - name: AGENT_WALLET_NAME
                   value: vc_oidc_agent-wallet
                 - name: WALLET_TYPE
@@ -281,6 +284,11 @@ parameters:
     description: The http port on which the service will listen.
     required: true
     value: "8021"
+  - name: GENESIS_FILE_URL
+    displayName: Genesis File URL
+    description: The URL from which the genesis file can be downloaded.
+    required: true
+    value: http://test.bcovrin.vonx.io/genesis
   - name: LOG_LEVEL
     displayName: Log Level
     description: The logging level for the agent.
