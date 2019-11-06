@@ -8,7 +8,8 @@ keycloak
   .success(function(authenticated) {
     // alert(authenticated ? "authenticated" : "not authenticated");
     keycloak.loadUserInfo().success(function(userInfo) {
-      document.getElementById("user-info").innerHTML = userInfo.name;
+      console.log("UserInfo: ", userInfo)
+      document.getElementById("user-info").innerHTML = userInfo.email;
       document.body.style.display = "";
     });
   })
