@@ -58,7 +58,7 @@ export class AppModule {
           onLoad: 'check-sso',
           checkLoginIframe: false
         },
-        bearerExcludedUrls: ['/assets']
+        bearerExcludedUrls: ['/assets', '/login']
       })
       .then(() => {
         console.log('[ngDoBootstrap] bootstrap app');
