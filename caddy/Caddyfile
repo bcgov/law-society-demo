@@ -12,4 +12,9 @@
 
     # Openly exposed health check endpoint for OpenShift
     status 200 /health
+
+    # Required for angular router to work
+    rewrite {
+        to {path} {path}/ /
+    }
 }

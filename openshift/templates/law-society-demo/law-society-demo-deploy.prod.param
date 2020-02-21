@@ -1,0 +1,16 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/law-society-demo/law-society-demo-deploy.json
+#=========================================================
+# NAME=law-society-demo
+# IMAGE_NAMESPACE=devex-von-tools
+# WEB_HOST_NAME=0.0.0.0
+# WEB_HOST_PORT=8080
+# WEB_HOST_TLS=off
+APPLICATION_DOMAIN=csb-audio.pathfinder.gov.bc.ca
+# TAG_NAME=prod
+# CPU_REQUEST=10m
+# CPU_LIMIT=250m
+# MEMORY_REQUEST=100Mi
+# MEMORY_LIMIT=256Mi

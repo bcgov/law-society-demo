@@ -1,0 +1,18 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/agent/agent-build.json
+#=========================================================
+NAME=law-society-agent
+SUFFIX=
+APP_NAME=law-society
+APP_GROUP=law-society
+GIT_REPO_URL=https://github.com/bcgov/law-society-demo.git
+GIT_REF=master
+SOURCE_CONTEXT_DIR=docker/agent
+OUTPUT_IMAGE_TAG=latest
+DOCKER_FILE_PATH=Dockerfile
+CPU_REQUEST=10m
+CPU_LIMIT=250m
+MEMORY_REQUEST=10Mi
+MEMORY_LIMIT=500Mi
