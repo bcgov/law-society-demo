@@ -3,7 +3,9 @@
 # Component: .
 # Template File: ../openshift/templates/law-society-demo/law-society-demo-build.json
 #=========================================================
-NAME=law-society-demo
+NAME=csb-audio-demo
+APP_NAME=csb-audio-demo
+APP_GROUP=csb-audio-demo
 GIT_REPO_URL=https://github.com/bcgov/law-society-demo.git
 GIT_REF=master
 SOURCE_CONTEXT_DIR=.
