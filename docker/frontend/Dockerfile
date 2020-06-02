@@ -13,6 +13,6 @@ RUN ng build --prod
 
 FROM abiosoft/caddy:no-stats as runtime
 
-COPY caddy/Caddyfile /etc/Caddyfile
+COPY config/Caddyfile /etc/Caddyfile
 
 COPY --from=builder /app/dist/a2a-demo /srv
