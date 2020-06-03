@@ -3,8 +3,8 @@
   "apiVersion": "v1",
   "metadata": {
     "annotations": {
-      "description": "Build template for a Caddy webserver serving a static HTML page.",
-      "tags": "caddy",
+      "description": "Build template for an Angular app.",
+      "tags": "caddy, vue",
       "iconClass": "icon-js"
     },
     "name": "${NAME}-build-template"
@@ -34,18 +34,32 @@
         }
       },
       "spec": {
+        "runPolicy": "Serial",
         "source": {
-          "type": "Git",
-          "git": {
-            "uri": "${GIT_REPO_URL}",
-            "ref": "${GIT_REF}"
-          },
-          "contextDir": "${SOURCE_CONTEXT_DIR}"
+          "type": "Dockerfile",
+          "dockerfile": "FROM ${RUNTIME_IMAGE_NAME}:${RUNTIME_IMAGE_TAG}\nCOPY /app/dist/a2a-demo /srv\nCOPY /app/config/Caddyfile /etc/Caddyfile",
+          "images": [
+            {
+              "from": {
+                "kind": "${ARTIFACT_IMAGE_KIND}",
+                "name": "${ARTIFACT_IMAGE_NAME}:${ARTIFACT_IMAGE_TAG}"
+              },
+              "paths": [
+                {
+                  "sourcePath": "/app",
+                  "destinationDir": "."
+                }
+              ]
+            }
+          ]
         },
         "strategy": {
           "type": "Docker",
           "dockerStrategy": {
-            "dockerfilePath": "${DOCKER_FILE_PATH}"
+            "from": {
+              "kind": "${SOURCE_IMAGE_KIND}",
+              "name": "${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}"
+            }
           }
         },
         "output": {
@@ -57,6 +71,9 @@
         "triggers": [
           {
             "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange"
           }
         ]
       }
@@ -66,7 +83,7 @@
     {
       "name": "NAME",
       "displayName": "Name",
-      "description": "The name assigned to all of the objects defined in this template.  You should keep this as default unless your know what your doing.",
+      "description": "The name assigned to all of the resources defined in this template.",
       "required": true,
       "value": "csb-audio-demo"
     },
@@ -85,39 +102,60 @@
       "value": "csb-audio-demo"
     },
     {
-      "name": "GIT_REPO_URL",
-      "displayName": "Git Repo URL",
-      "description": "The URL to your GIT repo, don't use the this default unless your just experimenting.",
-      "required": true,
-      "value": "https://github.com/bcgov/law-society-demo.git"
-    },
-    {
-      "name": "GIT_REF",
-      "displayName": "Git Reference",
-      "description": "The git reference or branch.",
-      "required": true,
-      "value": "master"
-    },
-    {
-      "name": "SOURCE_CONTEXT_DIR",
-      "displayName": "Source Context Directory",
-      "description": "The source context directory.",
-      "required": true,
-      "value": "."
-    },
-    {
-      "name": "DOCKER_FILE_PATH",
-      "displayName": "Docker File Path",
-      "description": "The path to the docker file defining the build.",
-      "required": false,
-      "value": "docker/frontend/Dockerfile"
-    },
-    {
       "name": "OUTPUT_IMAGE_TAG",
       "displayName": "Output Image Tag",
       "description": "The tag given to the built image.",
       "required": true,
       "value": "latest"
+    },
+    {
+      "name": "SOURCE_IMAGE_TAG",
+      "displayName": "Source Image Tag",
+      "description": "The tag of the source image.",
+      "required": true,
+      "value": "1.0.3-no-stats"
+    },
+    {
+      "name": "SOURCE_IMAGE_NAME",
+      "displayName": "Source Image Name",
+      "description": "The name of the runtime image.",
+      "required": true,
+      "value": "abiosoft/caddy"
+    },
+    {
+      "name": "SOURCE_IMAGE_KIND",
+      "displayName": "Source Image Kind",
+      "description": "The 'kind' (type) of the  source image; typically ImageStreamTag, or DockerImage.",
+      "required": true,
+      "value": "DockerImage"
+    },
+    {
+      "name": "ARTIFACT_IMAGE_NAME",
+      "displayName": "Artifact Image Name",
+      "description": "The name of the image containing the built artifacts.",
+      "required": true,
+      "value": "csb-audio-demo-base-image"
+    },
+    {
+      "name": "ARTIFACT_IMAGE_TAG",
+      "displayName": "Artifact Image Name",
+      "description": "The tag of the image containing the built artifacts",
+      "required": true,
+      "value": "latest"
+    },
+    {
+      "name": "ARTIFACT_IMAGE_NAMESPACE",
+      "displayName": "Source Image Namespace",
+      "description": "The namespace containing the artifact image.",
+      "required": true,
+      "value": "nnfbch-tools"
+    },
+    {
+      "name": "ARTIFACT_IMAGE_KIND",
+      "displayName": "Artifact Image Kind",
+      "description": "The 'kind' (type) of the artifact image; typically ImageStreamTag, or DockerImage.",
+      "required": true,
+      "value": "ImageStreamTag"
     }
   ]
 }

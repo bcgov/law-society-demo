@@ -46,7 +46,32 @@
             }
           },
           "spec": {
-            "volumes": [],
+            "volumes": [
+              {
+                "name": "${NAME}-caddy-config-volume",
+                "configMap": {
+                  "name": "${CADDY_CONFIG_MAP_NAME}",
+                  "items": [
+                    {
+                      "key": "${CADDY_CONFIG_FILE_NAME}",
+                      "path": "${CADDY_CONFIG_FILE_NAME}"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "${NAME}-app-config-volume",
+                "configMap": {
+                  "name": "${APP_CONFIG_MAP_NAME}",
+                  "items": [
+                    {
+                      "key": "${APP_CONFIG_FILE_NAME}",
+                      "path": "${APP_CONFIG_FILE_NAME}"
+                    }
+                  ]
+                }
+              }
+            ],
             "containers": [
               {
                 "image": "${NAME}",
@@ -84,12 +109,12 @@
                 },
                 "volumeMounts": [
                   {
-                    "name": "${NAME}${SUFFIX}-caddy-config-volume",
+                    "name": "${NAME}-caddy-config-volume",
                     "mountPath": "${CADDY_CONFIG_MOUNT_PATH}${CADDY_CONFIG_FILE_NAME}",
                     "subPath": "${CADDY_CONFIG_FILE_NAME}"
                   },
                   {
-                    "name": "${NAME}${SUFFIX}-app-config-volume",
+                    "name": "${NAME}-app-config-volume",
                     "mountPath": "${APP_CONFIG_MOUNT_PATH}${APP_CONFIG_FILE_NAME}",
                     "subPath": "${APP_CONFIG_FILE_NAME}"
                   }

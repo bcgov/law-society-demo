@@ -10,17 +10,18 @@ OUTPUT_FORMAT=json
 # Generate Caddyfile
 # Injected by genDepls.sh
 # - CADDY_CONFIG_MAP_NAME
-# - SUFFIX
-CADDY_SOURCE_FILE=$( dirname "$0" )../../../config/Caddyfile
+CADDY_SOURCE_FILE=$( dirname "$0" )/../../../config/Caddyfile
 CADDY_OUTPUT_FILE=${CADDY_CONFIG_MAP_NAME}-configmap_DeploymentConfig.json
 printStatusMsg "Generating ConfigMap; ${CADDY_CONFIG_MAP_NAME} ..."
-generateConfigMap "${CADDY_CONFIG_MAP_NAME}${SUFFIX}" "${CADDY_SOURCE_FILE}" "${OUTPUT_FORMAT}" "${CADDY_OUTPUT_FILE}"
+generateConfigMap "${CADDY_CONFIG_MAP_NAME}" "${CADDY_SOURCE_FILE}" "${OUTPUT_FORMAT}" "${CADDY_OUTPUT_FILE}"
 
 # Generate application config map based on the environment
-APPCONFIG_SOURCE_FILE=$( dirname "$0" )../../../config/${PROFILE}/config.json
+# Injected by genDepls.sh
+# - APP_CONFIG_MAP_NAME
+APPCONFIG_SOURCE_FILE=$( dirname "$0" )/../../../config/${TAG_NAME}/config.json
 APPCONFIG_OUTPUT_FILE=${APP_CONFIG_MAP_NAME}-configmap_DeploymentConfig.json
 printStatusMsg "Generating ConfigMap; ${APP_CONFIG_MAP_NAME} ..."
-generateConfigMap "${APP_CONFIG_MAP_NAME}${SUFFIX}" "${APPCONFIG_SOURCE_FILE}" "${OUTPUT_FORMAT}" "${APPCONFIG_OUTPUT_FILE}"
+generateConfigMap "${APP_CONFIG_MAP_NAME}" "${APPCONFIG_SOURCE_FILE}" "${OUTPUT_FORMAT}" "${APPCONFIG_OUTPUT_FILE}"
 
 unset SPECIALDEPLOYPARMS
 echo ${SPECIALDEPLOYPARMS}

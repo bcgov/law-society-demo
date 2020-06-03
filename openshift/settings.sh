@@ -3,8 +3,7 @@ export GIT_URI="https://github.com/bcgov/law-society-demo.git"
 export GIT_REF="master"
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# Override the deployment environments, since there is only one AT THE MOMENT:
-# nnfbch-dev
+# Override the PROD deployment environment
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 export DEV="dev"
 export TEST="test"
