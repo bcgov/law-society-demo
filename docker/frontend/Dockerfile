@@ -1,4 +1,4 @@
-FROM node:erbium as builder
+FROM node:erbium
 
 WORKDIR /app
 
@@ -10,9 +10,4 @@ ENV PATH="/app/node_modules/@angular/cli/bin:${PATH}"
 
 RUN ng build --prod
 
-
-FROM abiosoft/caddy:no-stats as runtime
-
-COPY caddy/Caddyfile /etc/Caddyfile
-
-COPY --from=builder /app/dist/a2a-demo /srv
+COPY config/Caddyfile /etc/Caddyfile

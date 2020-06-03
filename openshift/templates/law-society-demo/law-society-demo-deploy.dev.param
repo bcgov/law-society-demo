@@ -1,0 +1,24 @@
+#=========================================================
+# OpenShift template parameters for:
+# Component: .
+# Template File: ../openshift/templates/law-society-demo/law-society-demo-deploy.json
+#=========================================================
+# NAME=csb-audio-demo
+# APP_NAME=csb-audio-demo
+# APP_GROUP=csb-audio-demo
+# IMAGE_NAMESPACE=nnfbch-tools
+# WEB_HOST_NAME=0.0.0.0
+# WEB_HOST_PORT=8080
+# WEB_HOST_TLS=off
+APPLICATION_DOMAIN=csb-audio-demo-dev.pathfinder.gov.bc.ca
+# CADDY_CONFIG_FILE_NAME=Caddyfile
+# CADDY_CONFIG_MAP_NAME=law-society-demo-caddy-conf
+# CADDY_CONFIG_MOUNT_PATH=/etc/
+# APP_CONFIG_MAP_NAME=law-society-demo-config
+# APP_CONFIG_MOUNT_PATH=/srv/assets/config/
+# APP_CONFIG_FILE_NAME=config.json
+TAG_NAME=dev
+# CPU_REQUEST=10m
+# CPU_LIMIT=250m
+# MEMORY_REQUEST=100Mi
+# MEMORY_LIMIT=256Mi

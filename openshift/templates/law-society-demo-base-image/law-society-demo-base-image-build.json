@@ -2,12 +2,17 @@
   "kind": "Template",
   "apiVersion": "v1",
   "metadata": {
+    "annotations": {
+      "description": "Build template for an Angular app served by caddy.",
+      "tags": "nodejs, angular, caddy",
+      "iconClass": "icon-js"
+    },
     "name": "${NAME}-build-template"
   },
   "objects": [
     {
-      "apiVersion": "v1",
       "kind": "ImageStream",
+      "apiVersion": "v1",
       "metadata": {
         "name": "${NAME}",
         "labels": {
@@ -29,16 +34,6 @@
         }
       },
       "spec": {
-        "triggers": [
-          {
-            "type": "ConfigChange"
-          },
-          {
-            "type": "ImageChange",
-            "imageChange": {}
-          }
-        ],
-        "runPolicy": "Serial",
         "source": {
           "type": "Git",
           "git": {
@@ -48,12 +43,9 @@
           "contextDir": "${SOURCE_CONTEXT_DIR}"
         },
         "strategy": {
-          "type": "Source",
-          "sourceStrategy": {
-            "from": {
-              "kind": "${SOURCE_IMAGE_KIND}",
-              "name": "${SOURCE_IMAGE_NAME}:${SOURCE_IMAGE_TAG}"
-            }
+          "type": "Docker",
+          "dockerStrategy": {
+            "dockerfilePath": "${DOCKER_FILE_PATH}"
           }
         },
         "output": {
@@ -61,7 +53,22 @@
             "kind": "ImageStreamTag",
             "name": "${NAME}:${OUTPUT_IMAGE_TAG}"
           }
-        }
+        },
+        "resources": {
+          "requests": {
+            "cpu": "${CPU_REQUEST}",
+            "memory": "${MEMORY_REQUEST}"
+          },
+          "limits": {
+            "cpu": "${CPU_LIMIT}",
+            "memory": "${MEMORY_LIMIT}"
+          }
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          }
+        ]
       }
     }
   ],
@@ -71,26 +78,26 @@
       "displayName": "Name",
       "description": "The name assigned to all of the resources defined in this template.",
       "required": true,
-      "value": "law-society-wallet"
+      "value": "csb-audio-demo-base-image"
     },
     {
       "name": "APP_NAME",
       "displayName": "App Name",
       "description": "Used to group components together in the OpenShift console.",
       "required": true,
-      "value": "law-society"
+      "value": "csb-audio-demo"
     },
     {
       "name": "APP_GROUP",
       "displayName": "App Group",
       "description": "The name assigned to all of the deployments in this project.",
       "required": true,
-      "value": "law-society-storage"
+      "value": "csb-audio-demo"
     },
     {
       "name": "GIT_REPO_URL",
       "displayName": "Git Repo URL",
-      "description": "The URL to your GIT repo.",
+      "description": "The URL to your GIT repo, don't use the this default unless your just experimenting.",
       "required": true,
       "value": "https://github.com/bcgov/law-society-demo.git"
     },
@@ -105,29 +112,15 @@
       "name": "SOURCE_CONTEXT_DIR",
       "displayName": "Source Context Directory",
       "description": "The source context directory.",
+      "required": true,
+      "value": "."
+    },
+    {
+      "name": "DOCKER_FILE_PATH",
+      "displayName": "Docker File Path",
+      "description": "The path to the docker file defining the build.",
       "required": false,
-      "value": "wallet/config"
-    },
-    {
-      "name": "SOURCE_IMAGE_KIND",
-      "displayName": "Source Image Kind",
-      "description": "The 'kind' (type) of the  source image; typically ImageStreamTag, or DockerImage.",
-      "required": true,
-      "value": "DockerImage"
-    },
-    {
-      "name": "SOURCE_IMAGE_NAME",
-      "displayName": "Source Image Name",
-      "required": true,
-      "description": "The name of the source image.",
-      "value": "registry.access.redhat.com/rhscl/postgresql-10-rhel7"
-    },
-    {
-      "name": "SOURCE_IMAGE_TAG",
-      "displayName": "Source Image Tag",
-      "required": true,
-      "description": "The tag of the source image.",
-      "value": "latest"
+      "value": "docker/frontend/Dockerfile"
     },
     {
       "name": "OUTPUT_IMAGE_TAG",
@@ -135,6 +128,34 @@
       "description": "The tag given to the built image.",
       "required": true,
       "value": "latest"
+    },
+    {
+      "name": "CPU_LIMIT",
+      "displayName": "Resources CPU Limit",
+      "description": "The resources CPU limit (in cores) for this build.",
+      "required": true,
+      "value": "1"
+    },
+    {
+      "name": "MEMORY_LIMIT",
+      "displayName": "Resources Memory Limit",
+      "description": "The resources Memory limit (in Mi, Gi, etc) for this build.",
+      "required": true,
+      "value": "4Gi"
+    },
+    {
+      "name": "CPU_REQUEST",
+      "displayName": "Resources CPU Request",
+      "description": "The resources CPU request (in cores) for this build.",
+      "required": true,
+      "value": "250m"
+    },
+    {
+      "name": "MEMORY_REQUEST",
+      "displayName": "Resources Memory Request",
+      "description": "The resources Memory request (in Mi, Gi, etc) for this build.",
+      "required": true,
+      "value": "2Gi"
     }
   ]
 }

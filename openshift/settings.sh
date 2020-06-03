@@ -1,11 +1,10 @@
-export PROJECT_NAMESPACE="devex-von"
+export PROJECT_NAMESPACE="nnfbch"
 export GIT_URI="https://github.com/bcgov/law-society-demo.git"
 export GIT_REF="master"
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# Override the deployment environments, since there is only one AT THE MOMENT:
-# devex-von-prod
+# Override the PROD deployment environment
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-export DEV="prod"
-export TEST="prod"
-export PROD="prod"
+export DEV="dev"
+export TEST="test"
+export PROD="test"

@@ -3,9 +3,14 @@
 # Component: .
 # Template File: ../openshift/templates/law-society-demo/law-society-demo-build.json
 #=========================================================
-NAME=law-society-demo
-GIT_REPO_URL=https://github.com/bcgov/law-society-demo.git
-GIT_REF=master
-SOURCE_CONTEXT_DIR=.
-DOCKER_FILE_PATH=docker/frontend/Dockerfile
+NAME=csb-audio-demo
+APP_NAME=csb-audio-demo
+APP_GROUP=csb-audio-demo
 OUTPUT_IMAGE_TAG=latest
+SOURCE_IMAGE_TAG=1.0.3-no-stats
+SOURCE_IMAGE_NAME=abiosoft/caddy
+SOURCE_IMAGE_KIND=DockerImage
+ARTIFACT_IMAGE_NAME=csb-audio-demo-base-image
+ARTIFACT_IMAGE_TAG=latest
+ARTIFACT_IMAGE_NAMESPACE=nnfbch-tools
+ARTIFACT_IMAGE_KIND=ImageStreamTag
