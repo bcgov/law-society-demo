@@ -4,7 +4,7 @@
   "metadata": {
     "annotations": {
       "description": "Build template for an Angular app.",
-      "tags": "caddy, vue",
+      "tags": "caddy, angular",
       "iconClass": "icon-js"
     },
     "name": "${NAME}-build-template"
