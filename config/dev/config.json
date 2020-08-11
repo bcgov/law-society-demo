@@ -1,7 +1,0 @@
-{
-  "keycloak": {
-    "url": "https://sso-dev.pathfinder.gov.bc.ca/auth",
-    "realm": "sbtyffu4",
-    "clientId": "csb-audio-demo"
-  }
-}

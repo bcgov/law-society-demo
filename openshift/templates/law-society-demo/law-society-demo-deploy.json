@@ -3,28 +3,30 @@
   "kind": "Template",
   "metadata": {
     "annotations": {
-      "description": "Deployment template for a angular served by a Caddy webserver",
+      "description": "Deployment template for a Vue app served by a Caddy webserver",
       "tags": "angular, caddy"
     },
-    "name": "${NAME}-deployment-template"
+    "name": "${NAME}${SUFFIX}"
   },
   "objects": [
     {
       "apiVersion": "v1",
       "kind": "DeploymentConfig",
       "metadata": {
-        "name": "${NAME}",
         "labels": {
-          "name": "${NAME}",
-          "app": "${APP_NAME}",
-          "app-group": "${APP_GROUP}"
-        }
+          "app": "${APP_NAME}${SUFFIX}",
+          "name": "${NAME}${SUFFIX}",
+          "app-group": "${APP_GROUP}",
+          "role": "${ROLE}",
+          "env": "${TAG_NAME}"
+        },
+        "name": "${NAME}${SUFFIX}"
       },
       "spec": {
-        "replicas": 2,
+        "replicas": 1,
         "selector": {
-          "app": "${APP_NAME}",
-          "deploymentconfig": "${NAME}"
+          "name": "${NAME}${SUFFIX}",
+          "deploymentconfig": "${NAME}${SUFFIX}"
         },
         "strategy": {
           "rollingParams": {
@@ -39,18 +41,20 @@
         "template": {
           "metadata": {
             "labels": {
-              "name": "${NAME}",
-              "app": "${APP_NAME}",
+              "app": "${APP_NAME}${SUFFIX}",
+              "name": "${NAME}${SUFFIX}",
               "app-group": "${APP_GROUP}",
-              "deploymentconfig": "${NAME}"
+              "role": "${ROLE}",
+              "env": "${TAG_NAME}",
+              "deploymentconfig": "${NAME}${SUFFIX}"
             }
           },
           "spec": {
             "volumes": [
               {
-                "name": "${NAME}-caddy-config-volume",
+                "name": "${NAME}${SUFFIX}-caddy-config-volume",
                 "configMap": {
-                  "name": "${CADDY_CONFIG_MAP_NAME}",
+                  "name": "${CADDY_CONFIG_MAP_NAME}${SUFFIX}",
                   "items": [
                     {
                       "key": "${CADDY_CONFIG_FILE_NAME}",
@@ -60,9 +64,21 @@
                 }
               },
               {
-                "name": "${NAME}-app-config-volume",
+                "name": "${NAME}${SUFFIX}-app-claim-config-volume",
                 "configMap": {
-                  "name": "${APP_CONFIG_MAP_NAME}",
+                  "name": "${APP_CONFIG_MAP_NAME}${SUFFIX}",
+                  "items": [
+                    {
+                      "key": "${APP_CLAIM_CONFIG_FILE_NAME}",
+                      "path": "${APP_CLAIM_CONFIG_FILE_NAME}"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "${NAME}${SUFFIX}-app-config-volume",
+                "configMap": {
+                  "name": "${APP_CONFIG_MAP_NAME}${SUFFIX}",
                   "items": [
                     {
                       "key": "${APP_CONFIG_FILE_NAME}",
@@ -70,13 +86,73 @@
                     }
                   ]
                 }
+              },
+              {
+                "name": "${NAME}${SUFFIX}-app-custom-scripts-volume",
+                "configMap": {
+                  "name": "${APP_CONFIG_MAP_NAME}${SUFFIX}",
+                  "items": [
+                    {
+                      "key": "${APP_CUSTOM_SCRIPTS_FILE_NAME}",
+                      "path": "${APP_CUSTOM_SCRIPTS_FILE_NAME}"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "${NAME}${SUFFIX}-app-logo-volume",
+                "configMap": {
+                  "name": "${APP_CONFIG_MAP_NAME}${SUFFIX}",
+                  "items": [
+                    {
+                      "key": "${APP_LOGO_FILE_NAME}",
+                      "path": "${APP_LOGO_FILE_NAME}"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "${NAME}${SUFFIX}-app-terms-volume",
+                "configMap": {
+                  "name": "${APP_CONFIG_MAP_NAME}${SUFFIX}",
+                  "items": [
+                    {
+                      "key": "${APP_TERMS_FILE_NAME}",
+                      "path": "${APP_TERMS_FILE_NAME}"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "${NAME}${SUFFIX}-app-unauthorized-volume",
+                "configMap": {
+                  "name": "${APP_CONFIG_MAP_NAME}${SUFFIX}",
+                  "items": [
+                    {
+                      "key": "${APP_UNAUTHORIZED_FILE_NAME}",
+                      "path": "${APP_UNAUTHORIZED_FILE_NAME}"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "${NAME}${SUFFIX}-app-vuetify-volume",
+                "configMap": {
+                  "name": "${APP_CONFIG_MAP_NAME}${SUFFIX}",
+                  "items": [
+                    {
+                      "key": "${APP_VUETIFY_FILE_NAME}",
+                      "path": "${APP_VUETIFY_FILE_NAME}"
+                    }
+                  ]
+                }
               }
             ],
             "containers": [
               {
-                "image": "${NAME}",
+                "image": "${NAME}${SUFFIX}",
                 "imagePullPolicy": "Always",
-                "name": "${NAME}",
+                "name": "${NAME}${SUFFIX}",
                 "ports": [
                   {
                     "containerPort": 8080,
@@ -95,6 +171,14 @@
                   {
                     "name": "WEB_HOST_TLS",
                     "value": "${WEB_HOST_TLS}"
+                  },
+                  {
+                    "name": "API_HOST",
+                    "value": "${API_HOST}${SUFFIX}"
+                  },
+                  {
+                    "name": "API_PORT",
+                    "value": "${API_PORT}"
                   }
                 ],
                 "resources": {
@@ -109,14 +193,44 @@
                 },
                 "volumeMounts": [
                   {
-                    "name": "${NAME}-caddy-config-volume",
+                    "name": "${NAME}${SUFFIX}-caddy-config-volume",
                     "mountPath": "${CADDY_CONFIG_MOUNT_PATH}${CADDY_CONFIG_FILE_NAME}",
                     "subPath": "${CADDY_CONFIG_FILE_NAME}"
                   },
                   {
-                    "name": "${NAME}-app-config-volume",
+                    "name": "${NAME}${SUFFIX}-app-claim-config-volume",
+                    "mountPath": "${APP_CONFIG_MOUNT_PATH}${APP_CLAIM_CONFIG_FILE_NAME}",
+                    "subPath": "${APP_CLAIM_CONFIG_FILE_NAME}"
+                  },
+                  {
+                    "name": "${NAME}${SUFFIX}-app-config-volume",
                     "mountPath": "${APP_CONFIG_MOUNT_PATH}${APP_CONFIG_FILE_NAME}",
                     "subPath": "${APP_CONFIG_FILE_NAME}"
+                  },
+                  {
+                    "name": "${NAME}${SUFFIX}-app-custom-scripts-volume",
+                    "mountPath": "${APP_CONFIG_MOUNT_PATH}${APP_CUSTOM_SCRIPTS_FILE_NAME}",
+                    "subPath": "${APP_CUSTOM_SCRIPTS_FILE_NAME}"
+                  },
+                  {
+                    "name": "${NAME}${SUFFIX}-app-vuetify-volume",
+                    "mountPath": "${APP_CONFIG_MOUNT_PATH}${APP_VUETIFY_FILE_NAME}",
+                    "subPath": "${APP_VUETIFY_FILE_NAME}"
+                  },
+                  {
+                    "name": "${NAME}${SUFFIX}-app-logo-volume",
+                    "mountPath": "${APP_ARTIFACT_MOUNT_PATH}${APP_LOGO_FILE_NAME}",
+                    "subPath": "${APP_LOGO_FILE_NAME}"
+                  },
+                  {
+                    "name": "${NAME}${SUFFIX}-app-terms-volume",
+                    "mountPath": "${APP_ARTIFACT_MOUNT_PATH}${APP_TERMS_FILE_NAME}",
+                    "subPath": "${APP_TERMS_FILE_NAME}"
+                  },
+                  {
+                    "name": "${NAME}${SUFFIX}-app-unauthorized-volume",
+                    "mountPath": "${APP_ARTIFACT_MOUNT_PATH}${APP_UNAUTHORIZED_FILE_NAME}",
+                    "subPath": "${APP_UNAUTHORIZED_FILE_NAME}"
                   }
                 ],
                 "livenessProbe": {
@@ -161,12 +275,12 @@
             "imageChangeParams": {
               "automatic": true,
               "containerNames": [
-                "${NAME}"
+                "${NAME}${SUFFIX}"
               ],
               "from": {
                 "kind": "ImageStreamTag",
                 "namespace": "${IMAGE_NAMESPACE}",
-                "name": "${NAME}:${TAG_NAME}"
+                "name": "${SOURCE_IMAGE_NAME}:${TAG_NAME}"
               }
             }
           }
@@ -177,12 +291,14 @@
       "apiVersion": "v1",
       "kind": "Service",
       "metadata": {
-        "name": "${NAME}",
         "labels": {
-          "name": "${NAME}",
-          "app": "${APP_NAME}",
-          "app-group": "${APP_GROUP}"
-        }
+          "app": "${APP_NAME}${SUFFIX}",
+          "name": "${NAME}${SUFFIX}",
+          "app-group": "${APP_GROUP}",
+          "role": "${ROLE}",
+          "env": "${TAG_NAME}"
+        },
+        "name": "${NAME}${SUFFIX}"
       },
       "spec": {
         "ports": [
@@ -194,8 +310,8 @@
           }
         ],
         "selector": {
-          "app": "${NAME}",
-          "deploymentconfig": "${NAME}"
+          "name": "${NAME}${SUFFIX}",
+          "deploymentconfig": "${NAME}${SUFFIX}"
         },
         "sessionAffinity": "None",
         "type": "ClusterIP"
@@ -205,12 +321,14 @@
       "apiVersion": "v1",
       "kind": "Route",
       "metadata": {
-        "name": "${NAME}",
         "labels": {
-          "name": "${NAME}",
-          "app": "${APP_NAME}",
-          "app-group": "${APP_GROUP}"
-        }
+          "app": "${APP_NAME}${SUFFIX}",
+          "name": "${NAME}${SUFFIX}",
+          "app-group": "${APP_GROUP}",
+          "role": "${ROLE}",
+          "env": "${TAG_NAME}"
+        },
+        "name": "${NAME}${SUFFIX}"
       },
       "spec": {
         "host": "${APPLICATION_DOMAIN}",
@@ -223,37 +341,50 @@
         },
         "to": {
           "kind": "Service",
-          "name": "${NAME}",
+          "name": "${NAME}${SUFFIX}",
           "weight": 100
         }
       }
     },
     {
-      "kind": "HorizontalPodAutoscaler",
-      "apiVersion": "autoscaling/v1",
+      "kind": "NetworkSecurityPolicy",
+      "apiVersion": "secops.pathfinder.gov.bc.ca/v1alpha1",
       "metadata": {
-        "name": "${NAME}",
+        "name": "custom-${APP_NAME}-${NAME}${SUFFIX}-policy",
         "labels": {
-          "name": "${NAME}",
-          "app": "${APP_NAME}",
-          "app-group": "${APP_GROUP}"
+          "name": "custom-${APP_NAME}-${NAME}${SUFFIX}-policy",
+          "app": "${APP_NAME}${SUFFIX}",
+          "app-group": "${APP_GROUP}",
+          "role": "${ROLE}",
+          "env": "${TAG_NAME}"
         }
       },
       "spec": {
-        "scaleTargetRef": {
-          "kind": "DeploymentConfig",
-          "name": "${NAME}"
-        },
-        "minReplicas": 1,
-        "maxReplicas": 2
+        "description": "Allow the public frontend to talk to the controller service.",
+        "source": [
+          [
+            "role=${ROLE}",
+            "app=${APP_NAME}${SUFFIX}",
+            "env=${TAG_NAME}",
+            "$namespace=${NAMESPACE_NAME}-${TAG_NAME}"
+          ]
+        ],
+        "destination": [
+          [
+            "role=controller",
+            "app=${APP_NAME}${SUFFIX}",
+            "env=${TAG_NAME}",
+            "$namespace=${NAMESPACE_NAME}-${TAG_NAME}"
+          ]
+        ]
       }
     }
   ],
   "parameters": [
     {
-      "name": "NAME",
+      "description": "The name assigned to all of the openshift objects defined in this template. It is also the name of runtime image you want.",
       "displayName": "Name",
-      "description": "The name assigned to all of the objects defined in this template.  You should keep this as default unless your know what your doing.",
+      "name": "NAME",
       "required": true,
       "value": "csb-audio-demo"
     },
@@ -272,11 +403,123 @@
       "value": "csb-audio-demo"
     },
     {
+      "name": "SUFFIX",
+      "displayName": "Suffix",
+      "description": "A suffix applied to all of the objects in this template.",
+      "required": false,
+      "value": ""
+    },
+    {
+      "name": "ROLE",
+      "displayName": "Role",
+      "description": "The role of this service within the application - used for Network Policies",
+      "required": true,
+      "value": "public-frontend"
+    },
+    {
       "description": "The namespace where to get the above image name",
       "displayName": "Image Namespace",
       "name": "IMAGE_NAMESPACE",
       "required": true,
       "value": "nnfbch-tools"
+    },
+    {
+      "name": "NAMESPACE_NAME",
+      "displayName": "Namespace Name",
+      "description": "The name of the namespace being deployed to..",
+      "required": true,
+      "value": "nnfbch"
+    },
+    {
+      "name": "CADDY_CONFIG_FILE_NAME",
+      "displayName": "CAddy Config File Name",
+      "description": "The name of the configuration file to be used for Caddy.",
+      "required": true,
+      "value": "Caddyfile"
+    },
+    {
+      "name": "CADDY_CONFIG_MAP_NAME",
+      "displayName": "Caddyfile Config Map Name",
+      "description": "The name of the configuration map.",
+      "required": true,
+      "value": "csb-audio-demo-caddy-conf"
+    },
+    {
+      "name": "CADDY_CONFIG_MOUNT_PATH",
+      "displayName": "Config Mount Path",
+      "description": "The path to use to mount the config file.",
+      "required": true,
+      "value": "/etc/"
+    },
+    {
+      "name": "APP_CONFIG_MAP_NAME",
+      "displayName": "Application Config Map Name",
+      "description": "The name of the configuration map holding the data to configure the application.",
+      "required": true,
+      "value": "csb-audio-demo-config"
+    },
+    {
+      "name": "APP_CONFIG_MOUNT_PATH",
+      "displayName": "Application Config Mount Path",
+      "description": "The path to use to mount the configuration file(s).",
+      "required": true,
+      "value": "/srv/config/"
+    },
+    {
+      "name": "APP_CLAIM_CONFIG_FILE_NAME",
+      "displayName": "Application Claim Config File Name",
+      "description": "The name of the application claim configuration file.",
+      "required": true,
+      "value": "claim-config.json"
+    },
+    {
+      "name": "APP_CONFIG_FILE_NAME",
+      "displayName": "Application Config File Name",
+      "description": "The name of the application configuration file.",
+      "required": true,
+      "value": "config.json"
+    },
+    {
+      "name": "APP_CUSTOM_SCRIPTS_FILE_NAME",
+      "displayName": "Application Custom Scripts File Name",
+      "description": "The name of the application custom scripts file.",
+      "required": true,
+      "value": "custom-scripts.js"
+    },
+    {
+      "name": "APP_VUETIFY_FILE_NAME",
+      "displayName": "Application Vuetify File Name",
+      "description": "The name of the application vuetify file.",
+      "required": true,
+      "value": "vuetify.json"
+    },
+    {
+      "name": "APP_ARTIFACT_MOUNT_PATH",
+      "displayName": "Application Artifact Mount Path",
+      "description": "The path to use to mount the application artifact file(s).",
+      "required": true,
+      "value": "/srv/"
+    },
+    {
+      "name": "APP_LOGO_FILE_NAME",
+      "displayName": "Application logo File Name",
+      "description": "The name of the application logo file.",
+      "required": true,
+      "value": "logo.svg"
+    },
+    {
+      "name": "APP_TERMS_FILE_NAME",
+      "displayName": "Application Terms File Name",
+      "description": "The name of the application terms file.",
+      "required": true,
+      "value": "terms-and-conditions.html"
+    },
+    {
+      "name": "APP_UNAUTHORIZED_FILE_NAME",
+      "displayName": "Application Unauthorized File Name",
+      "description": "The name of the application unauthorized file.",
+      "required": true,
+      "value": "unauthorized.html"
     },
     {
       "name": "WEB_HOST_NAME",
@@ -300,52 +543,31 @@
       "value": "off"
     },
     {
+      "name": "API_HOST",
+      "displayName": "API Service Name",
+      "description": "The name of the API service.",
+      "required": true,
+      "value": "issuer-api"
+    },
+    {
+      "name": "API_PORT",
+      "displayName": "API Service Port",
+      "description": "The port used by the API service.",
+      "required": true,
+      "value": "8080"
+    },
+    {
       "description": "The exposed hostname that will route to the service, e.g., myappname.pathfinder.gov.bc.ca, if left blank a value will be defaulted.",
       "displayName": "Application Hostname",
       "name": "APPLICATION_DOMAIN",
-      "value": "csb-audio-demo.pathfinder.gov.bc.ca"
+      "value": ""
     },
     {
-      "name": "CADDY_CONFIG_FILE_NAME",
-      "displayName": "CAddy Config File Name",
-      "description": "The name of the configuration file to be used for Caddy.",
+      "name": "SOURCE_IMAGE_NAME",
+      "displayName": "Source Image Name",
+      "description": "The name of the image to use for this resource.",
       "required": true,
-      "value": "Caddyfile"
-    },
-    {
-      "name": "CADDY_CONFIG_MAP_NAME",
-      "displayName": "Caddyfile Config Map Name",
-      "description": "The name of the configuration map.",
-      "required": true,
-      "value": "law-society-demo-caddy-conf"
-    },
-    {
-      "name": "CADDY_CONFIG_MOUNT_PATH",
-      "displayName": "Config Mount Path",
-      "description": "The path to use to mount the config file.",
-      "required": true,
-      "value": "/etc/"
-    },
-    {
-      "name": "APP_CONFIG_MAP_NAME",
-      "displayName": "Application Config Map Name",
-      "description": "The name of the configuration map holding the data to configure the application.",
-      "required": true,
-      "value": "law-society-demo-config"
-    },
-    {
-      "name": "APP_CONFIG_MOUNT_PATH",
-      "displayName": "Application Config Mount Path",
-      "description": "The path to use to mount the configuration file(s).",
-      "required": true,
-      "value": "/srv/assets/config/"
-    },
-    {
-      "name": "APP_CONFIG_FILE_NAME",
-      "displayName": "Application Config File Name",
-      "description": "The name of the application configuration file.",
-      "required": true,
-      "value": "config.json"
+      "value": "csb-audio-demo"
     },
     {
       "description": "The TAG name for this environment, e.g., dev, test, prod",
