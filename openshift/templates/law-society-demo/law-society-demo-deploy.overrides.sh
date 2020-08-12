@@ -24,9 +24,9 @@ generateConfigMap "${CADDY_CONFIG_MAP_NAME}${SUFFIX}" "${CADDY_SOURCE_FILE}" "${
 # - DEPLOYMENT_ENV_NAME
 
 # Combine the profile's default config files with its environment specific config files before generating the config map ...
-profileRoot=$( dirname "$0" )/config/${PROFILE}
+profileRoot=$( dirname "$0" )/config/bc
 profileEnv=${profileRoot}/${DEPLOYMENT_ENV_NAME}
-profileTmp=$( dirname "$0" )/config/${PROFILE}/tmp
+profileTmp=$( dirname "$0" )/config/bc/tmp
 mkdir -p ${profileTmp}
 cp -f ${profileRoot}/* ${profileTmp} 2>/dev/null
 cp -f ${profileEnv}/* ${profileTmp} 2>/dev/null

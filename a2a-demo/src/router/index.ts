@@ -28,7 +28,10 @@ function router(config: AppConfig): VueRouter {
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "data-entry" */ "../views/A2A.vue")
+        import(/* webpackChunkName: "a2a" */ "../views/A2A.vue"),
+        meta: {
+          isPublic: false
+        }
     },
     {
       path: "/unauthorized",

@@ -64,18 +64,6 @@
                 }
               },
               {
-                "name": "${NAME}${SUFFIX}-app-claim-config-volume",
-                "configMap": {
-                  "name": "${APP_CONFIG_MAP_NAME}${SUFFIX}",
-                  "items": [
-                    {
-                      "key": "${APP_CLAIM_CONFIG_FILE_NAME}",
-                      "path": "${APP_CLAIM_CONFIG_FILE_NAME}"
-                    }
-                  ]
-                }
-              },
-              {
                 "name": "${NAME}${SUFFIX}-app-config-volume",
                 "configMap": {
                   "name": "${APP_CONFIG_MAP_NAME}${SUFFIX}",
@@ -83,18 +71,6 @@
                     {
                       "key": "${APP_CONFIG_FILE_NAME}",
                       "path": "${APP_CONFIG_FILE_NAME}"
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "${NAME}${SUFFIX}-app-custom-scripts-volume",
-                "configMap": {
-                  "name": "${APP_CONFIG_MAP_NAME}${SUFFIX}",
-                  "items": [
-                    {
-                      "key": "${APP_CUSTOM_SCRIPTS_FILE_NAME}",
-                      "path": "${APP_CUSTOM_SCRIPTS_FILE_NAME}"
                     }
                   ]
                 }
@@ -198,19 +174,9 @@
                     "subPath": "${CADDY_CONFIG_FILE_NAME}"
                   },
                   {
-                    "name": "${NAME}${SUFFIX}-app-claim-config-volume",
-                    "mountPath": "${APP_CONFIG_MOUNT_PATH}${APP_CLAIM_CONFIG_FILE_NAME}",
-                    "subPath": "${APP_CLAIM_CONFIG_FILE_NAME}"
-                  },
-                  {
                     "name": "${NAME}${SUFFIX}-app-config-volume",
                     "mountPath": "${APP_CONFIG_MOUNT_PATH}${APP_CONFIG_FILE_NAME}",
                     "subPath": "${APP_CONFIG_FILE_NAME}"
-                  },
-                  {
-                    "name": "${NAME}${SUFFIX}-app-custom-scripts-volume",
-                    "mountPath": "${APP_CONFIG_MOUNT_PATH}${APP_CUSTOM_SCRIPTS_FILE_NAME}",
-                    "subPath": "${APP_CUSTOM_SCRIPTS_FILE_NAME}"
                   },
                   {
                     "name": "${NAME}${SUFFIX}-app-vuetify-volume",
@@ -466,25 +432,11 @@
       "value": "/srv/config/"
     },
     {
-      "name": "APP_CLAIM_CONFIG_FILE_NAME",
-      "displayName": "Application Claim Config File Name",
-      "description": "The name of the application claim configuration file.",
-      "required": true,
-      "value": "claim-config.json"
-    },
-    {
       "name": "APP_CONFIG_FILE_NAME",
       "displayName": "Application Config File Name",
       "description": "The name of the application configuration file.",
       "required": true,
       "value": "config.json"
-    },
-    {
-      "name": "APP_CUSTOM_SCRIPTS_FILE_NAME",
-      "displayName": "Application Custom Scripts File Name",
-      "description": "The name of the application custom scripts file.",
-      "required": true,
-      "value": "custom-scripts.js"
     },
     {
       "name": "APP_VUETIFY_FILE_NAME",
