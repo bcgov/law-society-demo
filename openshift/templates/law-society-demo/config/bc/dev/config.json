@@ -14,7 +14,7 @@
       "silentRedirectUri": "https://csb-audio-demo-dev.pathfinder.gov.bc.ca/silent-renew-oidc.html",
       "post_logout_redirect_uri": "https://csb-audio-demo-dev.pathfinder.gov.bc.ca",
       "extraQueryParams": {
-        "pres_req_conf_id": "accredited_lawyer-dev"
+        "pres_req_conf_id": "accredited-lawyer-dev"
       }
     }
   }
