@@ -1,7 +1,0 @@
-{
-  "keycloak": {
-    "url": "https://sso-dev.pathfinder.gov.bc.ca/auth",
-    "realm": "vlv1c2en",
-    "clientId": "law-society-demo"
-  }
-}

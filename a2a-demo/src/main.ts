@@ -1,12 +1,32 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import App from "@/App.vue";
+import Vuetify from "@/plugins/vuetify";
+import router from "@/router";
+import * as ConfigService from "@/services/config";
+import IssueStore from "@/store";
+import "@/styles.scss";
+import "@babel/polyfill";
+import "@mdi/font/css/materialdesignicons.css";
+import "roboto-fontface/css/roboto/roboto-fontface.css";
+import Vue from "vue";
+import { UserVuetifyPreset } from "vuetify";
+import { AppConfig } from "./models/appConfig";
 
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
+Vue.config.productionTip = false;
 
-if (environment.production) {
-  enableProdMode();
-}
+Promise.all([
+  ConfigService.getAppConfig(),
+  ConfigService.getThemeConfig()
+]).then(values => {
+  const config = values[0] as AppConfig;
+  const themeConfig = values[1] as UserVuetifyPreset;
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+  new Vue({
+    store: IssueStore.getInstance(config),
+    router: router(config),
+    vuetify: new Vuetify(themeConfig),
+    created: function() {
+      this.$store.commit("configuration/setAppConfig", config);
+    },
+    render: h => h(App)
+  }).$mount("#app");
+});
