@@ -3,7 +3,7 @@
 # Component: .
 # Template File: ../openshift/templates/law-society-demo/law-society-demo-deploy.json
 #=========================================================
-# NAME=law-society-demo
+# NAME=csb-audio-demo
 # APP_NAME=csb-audio-demo
 # APP_GROUP=csb-audio-demo
 # SUFFIX=
