@@ -3,8 +3,8 @@
   "apiVersion": "v1",
   "metadata": {
     "annotations": {
-      "description": "Build template for an Angular app.",
-      "tags": "caddy, angular",
+      "description": "Build template for a VueJS app.",
+      "tags": "caddy, vue",
       "iconClass": "icon-js"
     },
     "name": "${NAME}-build-template"
@@ -37,7 +37,7 @@
         "runPolicy": "Serial",
         "source": {
           "type": "Dockerfile",
-          "dockerfile": "FROM ${RUNTIME_IMAGE_NAME}:${RUNTIME_IMAGE_TAG}\nCOPY /app/dist/a2a-demo /srv",
+          "dockerfile": "FROM ${RUNTIME_IMAGE_NAME}:${RUNTIME_IMAGE_TAG}\nCOPY /app/dist /srv\nCOPY /app/config/Caddyfile /etc/Caddyfile",
           "images": [
             {
               "from": {

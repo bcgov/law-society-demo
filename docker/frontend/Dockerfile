@@ -1,13 +1,8 @@
 FROM node:erbium
-
 WORKDIR /app
-
-ADD a2a-demo /app
-
+#  Copy caddyfile for later use in chained build
+COPY config/Caddyfile /app/config/Caddyfile
+COPY a2a-demo/package*.json ./
 RUN npm install
-
-ENV PATH="/app/node_modules/@angular/cli/bin:${PATH}"
-
-RUN ng build --prod
-
-COPY config/Caddyfile /etc/Caddyfile
+COPY a2a-demo/ .
+RUN npm run build

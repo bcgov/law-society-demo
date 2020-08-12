@@ -1,4 +1,2 @@
-/* You can add global styles to this file, and also import other style files */
-
-$bcgov-font-path: "../node_modules/@bcgov/bootstrap-theme/dist/fonts/";
-@import "../node_modules/@bcgov/bootstrap-theme/dist/scss/bootstrap-theme";
+// survey-js
+@import "https://surveyjs.azureedge.net/1.5.13/survey.css";
