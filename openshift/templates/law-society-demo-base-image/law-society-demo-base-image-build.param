@@ -8,6 +8,7 @@ APP_NAME=csb-audio-demo
 APP_GROUP=csb-audio-demo
 GIT_REPO_URL=https://github.com/bcgov/law-society-demo.git
 GIT_REF=master
+SOURCE_IMAGE_NAME=docker-remote.artifacts.developer.gov.bc.ca/node:erbium
 SOURCE_CONTEXT_DIR=.
 DOCKER_FILE_PATH=docker/frontend/Dockerfile
 OUTPUT_IMAGE_TAG=latest

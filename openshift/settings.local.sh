@@ -1,3 +1,4 @@
-export PROJECT_NAMESPACE="nnfbch"
+#! /bin/bash
+export PROJECT_NAMESPACE="a99fd4"
 export GIT_URI="https://github.com/esune/law-society-demo.git"
 export GIT_REF="master"
