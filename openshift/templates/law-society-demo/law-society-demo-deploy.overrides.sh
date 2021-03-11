@@ -1,5 +1,5 @@
-#! /bin/bash
-includeFile=$(type -p overrides.inc)
+#!/bin/bash
+_includeFile=$(type -p overrides.inc)
 if [ ! -z ${_includeFile} ]; then
   . ${_includeFile}
 else
