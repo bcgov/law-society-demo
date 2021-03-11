@@ -61,7 +61,7 @@ Accept the credential.
 
 ## Login to the CSB Audio Demo
 
-Browse to the [CSB Audio Demo](https://csb-audio-demo-test.pathfinder.gov.bc.ca/) application, and click on **Access Site**
+Browse to the [CSB Audio Demo](https://csb-audio-demo-test.apps.silver.devops.gov.bc.ca/) application, and click on **Access Site**
 <br/>
 <img src="./images/csb-audio-demo.png" width="405"/>
 
