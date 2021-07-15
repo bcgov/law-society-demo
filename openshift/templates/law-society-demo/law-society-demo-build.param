@@ -1,10 +1,10 @@
 #=========================================================
 # OpenShift template parameters for:
 # Component: .
-# Template File: ../openshift/templates/law-society-demo/law-society-demo-build.json
+# Template File: ../openshift/templates/law-society-demo/law-society-demo-build.yaml
 #=========================================================
 NAME=csb-audio-demo
-APP_NAME=csb-audio-demo
+APP_NAME=issuer-a2a
 APP_GROUP=csb-audio-demo
 OUTPUT_IMAGE_TAG=latest
 SOURCE_IMAGE_TAG=1.0.3-no-stats

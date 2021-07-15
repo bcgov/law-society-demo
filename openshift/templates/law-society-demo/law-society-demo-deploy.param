@@ -1,10 +1,10 @@
 #=========================================================
 # OpenShift template parameters for:
 # Component: .
-# Template File: ../openshift/templates/law-society-demo/law-society-demo-deploy.json
+# Template File: ../openshift/templates/law-society-demo/law-society-demo-deploy.yaml
 #=========================================================
 NAME=csb-audio-demo
-APP_NAME=csb-audio-demo
+APP_NAME=issuer-a2a
 APP_GROUP=csb-audio-demo
 SUFFIX=
 ROLE=public-frontend
