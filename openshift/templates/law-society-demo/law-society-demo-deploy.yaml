@@ -208,7 +208,7 @@ objects:
       name: ${NAME}-allow-ingress
       labels:
         name: ${NAME}-allow-ingress
-        app: ${APP_GROUP}
+        app: ${APP_NAME}${SUFFIX}
         app-group: ${APP_GROUP}
         role: ${ROLE}
         env: ${TAG_NAME}
@@ -223,7 +223,7 @@ objects:
       podSelector:
         matchLabels:
           role: ${ROLE}
-          app: ${APP_GROUP}
+          app: ${APP_NAME}${SUFFIX}
           env: ${TAG_NAME}
       policyTypes:
         - Ingress
