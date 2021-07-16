@@ -1,10 +1,10 @@
 #=========================================================
 # OpenShift template parameters for:
 # Component: .
-# Template File: ../openshift/templates/law-society-demo-base-image/law-society-demo-base-image-build.json
+# Template File: ../openshift/templates/law-society-demo-base-image/law-society-demo-base-image-build.yaml
 #=========================================================
 NAME=csb-audio-demo-base-image
-APP_NAME=csb-audio-demo
+APP_NAME=issuer-a2a
 APP_GROUP=csb-audio-demo
 GIT_REPO_URL=https://github.com/bcgov/law-society-demo.git
 GIT_REF=master
