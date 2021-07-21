@@ -18,7 +18,7 @@ On the home screen of your mobile wallet, access settings by clicking on the ham
 
 ## Get Your Credentials
 
-Browse to the [A2A - Trust Over IP Issuer](https://a2a-issuer-test.pathfinder.gov.bc.ca/) application.
+Browse to the [A2A - Trust Over IP Issuer](https://a2a-issuer-test.apps.silver.devops.gov.bc.ca/) application.
 
 Agree to the terms of service.
 <br/>
